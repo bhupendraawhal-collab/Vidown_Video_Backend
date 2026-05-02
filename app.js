@@ -2,10 +2,20 @@ const express = require("express");
 const cros = require("cors");
 const requestIp = require("request-ip");
 require("dotenv").config();
+const dns = require("dns");
 const mongoos = require("mongoose");
 const UAParser = require("ua-parser-js");
-const MONGO_CONNECT = process.env.MONGO_URI || "mongodb://localhost:27017smvd";
+const MONGO_CONNECT = process.env.MONGO_URI || "mongodb://localhost:27017/smvd";
 const PORT_NO = "3030";
+
+if (MONGO_CONNECT.startsWith("mongodb+srv://")) {
+  dns.setServers(
+    (process.env.MONGO_DNS_SERVERS || "1.1.1.1,8.8.8.8")
+      .split(",")
+      .map((server) => server.trim())
+      .filter(Boolean)
+  );
+}
 
 const app = express();
 
